@@ -1,10 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Playground — Complete Intro to Vue 3</title>
-  </head>
-  <body></body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playground — Complete Intro to Vue 3</title>
+</head>
+
+<body>
+  <h1>Hello</h1>
+  <div id="app">
+    <p v-if="tvShowName.length % 2 === 0"> My Favorite Show is {{ tvShowName }} </p>
+    <p v-else> My least favorite show is {{ tvShowName }} </p>
+    <table> Main Characters:
+      <thead>
+        <tr>
+          <th scope="col"> Name </th>
+          <th scope="col"> Age </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="character in listOfCharacters"><th>{{ character.name }}</th><th>{{character.age}}</th><th><button @click="setFavorite(character)"> Set As Favorite</button>
+          </th></tr>
+      </tbody>
+    </table>
+    <div>
+      <h2>How Many Characters are Old?</h2>
+      <p>{{howManyOld}}</p>
+    </div>
+
+    <div>
+      <p v-if="listFaves.length === 0"> I have no favorite characters
+      </p>
+      <p v-else> My favorite characters are:
+      <ul>
+        <li v-for="fave in listFaves"> {{ fave }}</li>
+      </ul>
+      </p>
+    </div>
+    <div>
+      <h1>Create A New Character</h1>
+      <div>
+        <label for="name">Enter a new character: </label>
+        <input type="text" name="name" id="characterName" required />
+      </div>
+      <div>
+        <button @click="addCharacter"> Add </button>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>const { createApp } = Vue
+  const app = createApp({
+    // Can also write as: data: () => ({})
+    data() {
+      return {
+        tvShowName: "Parks and Recreation",
+        listOfCharacters: [{"name": "April Ludgate", "age": 20}, {"name": "Ron Swanson", "age": 55}, {"name": "Leslie Knope", "age": 40}, {"name": "Ben Wyatt", "age": 41}, {"name": "Andy Dwyer", "age": 29}, {"name": "Ann Perkins", "age": 28}, {"name": "lil Sebastian", "age": 5}],
+        listFaves: []
+      }
+    },
+    computed: {
+      howManyOld () {
+        const statistics = {
+          "old": 0,
+          "young": 0
+        }
+        let count = 0;
+        
+        this.listOfCharacters.forEach(character => {
+          if(character.age > 30) {
+            statistics.old += 1
+          }
+          else {
+            statistics.young += 1
+          }
+        })
+        return statistics;
+      }
+    },
+    methods: {
+      setFavorite(character) {
+        if (this.listFaves.includes(character)) {
+          return
+        }
+        this.listFaves.push(character)
+      },
+      addCharacter() {
+        this.listOfCharacters.push(document.getElementById("characterName").value)
+        console.log(this.listOfCharacters);
+      },
+
+    }
+
+  })
+  app.mount('#app')</script>
+<style>
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+</style>
+
 </html>
